@@ -165,7 +165,11 @@ class FCM
   end
 
   def build_post_body(registration_ids, options = {})
-    { registration_ids: registration_ids }.merge(options)
+    if registration_ids.is_a?(Array) && registration_ids.size > 1
+      { registration_ids: registration_ids }.merge(options)
+    else
+      { to: registration_ids }.merge(options)
+    end
   end
 
   def build_response(response, registration_ids = [])
