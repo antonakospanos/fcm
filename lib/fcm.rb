@@ -167,6 +167,8 @@ class FCM
   def build_post_body(registration_ids, options = {})
     if registration_ids.is_a?(Array) && registration_ids.size > 1
       { registration_ids: registration_ids }.merge(options)
+    elsif registration_ids.is_a?(Array)
+      { registration_ids: registration_ids.first }.merge(options)
     else
       { to: registration_ids }.merge(options)
     end
