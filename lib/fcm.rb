@@ -94,7 +94,7 @@ class FCM
         notification_key_name: key_name
       }
     }
-      
+
     extra_headers = {
       'project_id' => project_id
     }
@@ -144,7 +144,7 @@ class FCM
     params = {
       query: options
     }
-    
+
     for_uri(INSTANCE_ID_API) do |connection|
       response = connection.get('/iid/info/'+iid_token, params)
       build_response(response)
@@ -174,6 +174,13 @@ class FCM
     end
   end
 
+  def validate_registration_ids(registration_ids)
+    body = { registration_ids: registration_ids, dry_run: true }
+    for_uri(BASE_URI) do |connection|
+      response = connection.post("/fcm/send", body.to_json)
+      build_response(response, registration_ids)
+    end
+  end
   private
 
   def for_uri(uri, extra_headers = {})
