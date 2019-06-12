@@ -238,7 +238,8 @@ class FCM
     unless body.empty?
       if body['failure'] > 0
         body['results'].each_with_index do |result, index|
-          not_registered_ids << registration_id[index] if is_not_registered?(result)
+          invalid_token = is_not_registered?(result) || is_invalid_registration?(result)
+          not_registered_ids << registration_id[index] if invalid_token
         end
       end
     end
@@ -258,6 +259,10 @@ class FCM
 
   def is_not_registered?(result)
     result['error'] == 'NotRegistered'
+  end
+
+  def is_invalid_registration?(result)
+    result['error'] == 'InvalidRegistration'
   end
 
   def validate_condition?(condition)
